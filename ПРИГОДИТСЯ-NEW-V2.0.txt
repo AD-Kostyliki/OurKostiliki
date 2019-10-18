@@ -1,0 +1,1042 @@
+
+Костылик jQuery, добавляет онклики, если стоит одинаковая форма, но нужно разные повесить на разных страничках (rainbowsmile) 
+
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+if(location.pathname.indexOf('/contact')!=-1){
+jQuery('#fld_7908577_1').attr('onclick','yaCounter51292363.reachGoal(\'otpravka\'); return true;');
+}
+else(jQuery('#fld_7908577_1').attr('onclick','yaCounter51292363.reachGoal(\'zvonok\'); return true;'));
+    });
+</script>
+
+
+http://an.rem-mach.ru/tasks/931455/ хорошее тз
+
+
+чтобы проверить работает ли функция отправки писем заливаем в корень этот файл. в нем меняем почту на свою, затем переходим на страницу файла. делаем отправку - потом обращаемся к файлу в корне.
+если отправка удастся, значит все ок 
+если будет сообщение что не удалась то функция не работает. нужно ее включать на хосте
+
+
+чтобы появилась благодарность в статической форме нужно поправить стили у всплывашки, убрать абсолюное позиционирование, и добавить display block http://prntscr.com/og9bwk ) :)
+
+
+
+проверка ответа сервера 
+https://bertal.ru/
+
+
+
+выпадающее меню )
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        $('#pillmenu > ul > li.parent.item47').mouseenter(function () {
+        $('#pillmenu > ul > li > ul').css('display','block');
+    })});
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        $('#pillmenu > ul > li.parent.item47').mouseleave(function () {
+        $('#pillmenu > ul > li.parent > ul').css('display','none');
+    })});
+</script>
+
+вот сриптик полностью рабочий, может пригодится для дальнейших подключений bx-слайдера))
+
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<link href="/bxslider/jquery.bxslider.css" rel="stylesheet">
+<script>jQuery(document).ready(function(){
+  jQuery('.bxslider').bxSlider({
+    auto: true,
+   speed: 1000,
+   infiniteLoop: true
+     });
+    });
+</script>
+это при условии, что jQuery уже подключен ранее в файлике где-то)
+если нет, то вот) добавить в этот скриптик)
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ну там в инструкции https://bxslider.com/install/ в принципе всё и так понятно)) :$
+
+
+
+Костылик php, делает редирект страничек со / на без в конце URL :)
+<?
+if (substr($_SERVER['REQUEST_URI'], -1) == "/") {
+  header("HTTP/1.1 301 Moved Permanently");
+  header("Location: " . substr($_SERVER['REQUEST_URI'], 0, -1));
+  exit();
+  }
+?>
+
+Проверить версию пхп на сайтике 
+создай файлик с любым названием,php
+в нем напиши <?
+phpinfo();
+?>
+и обращаемся к нему в браузере 
+
+
+Если нужно исправить ошибочку 
+отображения проверочки
+ ya-phone на WordPress и вместо get-параметра ?openstat=direct.yandex.ru;;; отображается что-то типа такого
+ - ?openstat=direct.yandex.ru%B20%B20%B20 , то нужно в файлике /wp-includes/functions.php найти переменную $ret и после
+ нее добавить пыховский декодер (rainbowsmile)
+
+$ret = urldecode($ret);
+
+
+http://denis-creative.com/popup-contact-form/
+контакт7 всплываающий
+
+
+ //отдача 404, ищет в url 404 
+  if(isset($_GET["error"])){
+header("HTTP/1.1 404 Not Found");
+header("Location: 404");
+exit();}
+
+// отдача 404,  если в конце results
+$url = explode('/', $_SERVER['REQUEST_URI']);
+$lastEl = $url[count($url) - 1];
+if(preg_match('/results,[0-9-]*.html/', $lastEl)) { // регулярка
+  	header("HTTP/1.1 404 Not Found");
+	header("Location: 404");
+	exit();
+}
+
+
+
+Рабочее подключение мета пхп на мод х рево) (rainbowsmile)
+<?php
+set_include_path($_SERVER["DOCUMENT_ROOT"]);
+$newPatn = get_include_path();
+if(file_exists($newPatn.'/aweb_seo/_meta.php')) include_once($newPatn.'/aweb_seo/_meta.php');
+
+echo '<title>'. (isset($m['META_T'])&&$m['META_T']?$m['META_T'] : "[[*description:default=`[[*pagetitle]]`]]") .'</title>';
+echo '<meta name="description" content="'. (isset($m["META_D"])&&$m["META_D"]?$m["META_D"] : "[[*metadescription:default=`[[*introtext]]`]]") .'" />';
+echo '<meta name="keywords" content="'. (isset($m["META_K"])&&$m["META_K"]?$m["META_K"]:"[[*metakeywords]]") .'" />';
+
+
+
+Редирект с ?_openstat=direct.yandex.ru;;; на ?_openstat=direct.yandex.ru%3B%3B%3B
+
+1. Открываем файл wp-includes/functions.php.
+2. Находим function add_query_arg().
+3. После $ret = rtrim( $ret, '?' ); вставляем $ret = urldecode($ret);
+
+Реализация 404-ой страницы на Virtuemart
+
+1. Открываем файл components/com_virtuemart/router.php .
+2. Находим условие if (class_exists($_class)) { .
+3. Заменяем else { ... } данного условия на :
+
+else {
+vmDebug('VirtueMart controller not found: '. $_class);
+    $mainframe = Jfactory::getApplication();
+  	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+  	echo file_get_contents('ссылка на 404');
+  	exit;
+}
+
+
+
+Костылик php, добавляет canonical на странички материалов, которые содержат цифры в URL, canonical ведет на родительскую страничку) (rainbowsmile)
+
+вставлять в шаблончик)
+
+<?php
+$link = $_SERVER['REQUEST_URI'];
+$link2 = explode('/',$_SERVER['REQUEST_URI']);
+if(preg_match('/[0-9]/', $link)){?>
+  <link rel='canonical' href="<?echo 'доменное имя сайтика'.$link2[1] .'/'?>">;
+<?}
+?>
+
+
+Костылик php, делает редиректик страничек со слешом на без слеша и убирает index.php в середине url :)
+
+if (strrpos($_SERVER['REQUEST_URI'], "index.php") !== false || (substr_count($_SERVER['REQUEST_URI'], '/') > 1 && substr($_SERVER['REQUEST_URI'], -1) == '/')){
+
+ if (strrpos($_SERVER['REQUEST_URI'], "index.php/") !== false && substr($_SERVER['REQUEST_URI'], -1) == '/') {
+			  $link = str_replace("index.php/", "", $_SERVER{"REQUEST_URI"});
+  $link2 = substr($link, 0, -1);
+ header("HTTP/1.1 301 Moved Permanently");
+ header("Location: https://maltastudio.ru".$link2);
+  exit();
+	}elseif (strrpos($_SERVER['REQUEST_URI'], "index.php/") !== false) {
+					  $link = str_replace("index.php/", "", $_SERVER{"REQUEST_URI"});					  
+					  header("HTTP/1.1 301 Moved Permanently");
+					  header("Location: https://maltastudio.ru".$link);
+					  exit();
+	}elseif (strrpos($_SERVER['REQUEST_URI'], "index.php") !== false) {
+					  $link = str_replace("index.php", "", $_SERVER{"REQUEST_URI"});					  
+					  header("HTTP/1.1 301 Moved Permanently");
+					  header("Location: https://maltastudio.ru".$link);
+					  exit();
+	}elseif (substr($_SERVER['REQUEST_URI'], -1) == '/') {
+  $link2 = substr($_SERVER['REQUEST_URI'], 0, -1);
+ header("HTTP/1.1 301 Moved Permanently");
+ header("Location: https://maltastudio.ru{$link2}");
+  exit();
+	}
+
+}
+
+
+
+
+дебагер
+допиши в юрл в конец это
+?_ym_debug=1
+и открой консольку
+
+
+_fnd2/index.php
+если не работает файндер при обращении _fnd2
+
+
+
+SFE ссылки
+Краткая инструкция:
+Пример:
+Создаем товар
+http://prntscr.com/meq3i5
+Открываем sef http://prntscr.com/meq4bq
+выбираем viruemart
+вводим название товара http://prntscr.com/meq6yg http://prntscr.com/meq7bn
+нажимаем поиск http://prntscr.com/meq7jj и изменяем ссылку http://prntscr.com/meq7ym
+в итоге получаем ссылку на нужный нам товар с нужной вложеностью http://skladteh33.ru/novayassilka.html
+
+
+
+
+Нельзя:
+Размещать фотографии или сертификаты, дипломы, если размер их огромный. 
+Необходимо обрезать и уменьшать фото в фотошопе.
+ примерно 800х600/600х800 пикселей и до 300 Кб — при условии, что нам нужно максимальное качество картинки.
+ Обычно параметры картинки примерно 600х400 пикс с весом до 100 Кб.
+https://kraken.io/web-interface
+сервис для сжатия картинок 
+http://sm-teh.ru/obrabotka-izobrazhenij/
+
+
+
+Если вам придет задачка повесить разные онклики на формы, а у вас на сайте у разных всплывающих форм используется один шаблон (например, заказать звонок, задать вопрос и т.д.), можете сделать такой костылик с условием, чтобы установить разные цели на формы:
+<script>
+	jQuery(document).ready(function(){
+		if(jQuery('сюда селектор названия формы http://prntscr.com/mqpy03').text() == 'Задать вопрос'){
+jQuery('сюда селектор кнопки, куда вешаем онклик').attr('onclick','yaCounter42336994.reachGoal(\'otpravka2\'); return true;');
+		}
+		elseif (jQuery('сюда селектор названия формы http://prntscr.com/mqpxr9').text() == 'Заказать звонок'){
+jQuery('сюда селектор кнопки, куда вешаем онклик').attr('onclick','yaCounter42336994.reachGoal(\'zvonok\'); return true;');
+		}
+	})
+</script>
+
+
+
+Костылик js, делает автозаполение формы :)
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    $("input[name='mf_product_name']").val($("body > div.wrapper > section > div > div.span9.r-bg > article > h1 > cufon > cufontext").text());
+  });
+</script>
+
+Запросик к бд, заменить строку в таблице :)
+UPDATE таблица SET поле = replace(поле,"что ищем","на что меняем");
+
+
+
+Правило в htaccess, делает редиректик страничек со слэшом в конце и без слеша на .html (rainbowsmile) 
+RewriteEngine On
+RewriteCond %{REQUEST_URI} (.*/[^/.]+)($|\?)
+RewriteRule .* %1.html [R=301,L]
+RewriteRule ^(.*)/$ /$1.html [R=301,L]
+-----------------------------------------------------
+Правило в htaccess, убирает index.php не только с главной, но и внутри ссылочек, например - http://burovik.org/index.php/prays-list  (rainbowsmile) 
+
+RewriteRule ^index.php/(.*)$ http://burovik.org/$1 [R=permanent,L]
+
+
+
+Костылик jQuery, добавляет онклики, если стоит одинаковая форма, но нужно разные повесить на разных страничках (rainbowsmile) 
+
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+if(location.pathname.indexOf('/contact')!=-1){
+jQuery('#fld_7908577_1').attr('onclick','yaCounter51292363.reachGoal(\'otpravka\'); return true;');
+}
+else(jQuery('#fld_7908577_1').attr('onclick','yaCounter51292363.reachGoal(\'zvonok\'); return true;'));
+    });
+</script>
+
+
+http --> https 
+1. проверить по страницам какие ошибки пишет консоль, с с кринами отписать 
+тестирование страниц на предмет работы скриптов
+открываешь консоль в браузере
+ и смотришь есть ли ошибки скриптов - красным горят.
+ и так проверяешь страницы в течение примерно одного часа - например все страницы из меню прокликать
+ и просмотреть есть ли ошибки в консоли
+и да, будет правильно еще визуально посмотреть работает ли слайдер, форма и остальное на скриптах
+
+"Бесплатная проверка доступности сайта из различных частей мира" )
+https://ping-admin.ru/free_test/
+
+
+Правило для .htaccess, если нужно в joomla убрать ссылочки такого типа
+http://vorota-avto.ru/nashi-raboty/index.php?option=com_content&view=article&id=1
+
+RewriteEngine On
+RewriteRule ^(.*)$ index.php?$1 [L]
+
+редиректик, убирает index.php в середине url
+if (strrpos($_SERVER['REQUEST_URI'], "index.php") !== false) {
+  $link = str_replace("index.php", "", $_SERVER{"REQUEST_URI"});
+ header("HTTP/1.1 301 Moved Permanently");
+ header("Location: $link");
+  exit;
+}
+
+
+Костылик WP (хук), позволяет добавить любой код в <head>, если добавить обычный способом не получилось (rainbowsmile)
+
+
+add_action("wp_head", "wp_head_любое_название");
+ 
+function wp_head_повторение_любого_названия() {
+	?>
+тут любой код, который нужно вывести в <head>
+	<?php
+}
+
+
+
+
+
+Если нужно установить принудительно http вместо https для сайтика (WordPress) (а он неявно редиректит на https и не дает зайти на сайтик), вставлять в wp-config в самое начало http://prntscr.com/m5gl8z ) (rainbowsmile) 
+
+define( 'WP_HOME', 'http://electro-sad.ru' );
+define( 'WP_SITEURL', 'http://electro-sad.ru' );
+
+
+
+
+Если нужно залить файлик sitemap (например, на opencart http://prntscr.com/lxept1 ), 
+а файлик, при обращении к нему, показывает белый экранчик,
+ вместо содержимого, нужно в файлике .htaccess закомментировать эту строчку http://prntscr.com/lxeppc ,
+ и всё будет работать)) http://snabvam.ru/sitemap.xml (rainbowsmile)
+
+
+https://geekbrains.ru/posts/newyear_css_decor 
+новогодний декор
+
+
+Костылик jQuery, скрывает форму, если кликнуть вне самой формы (rainbowsmile) 
+Примерчик реализации на сайтике http://sag-shpunt.ru :$ 
+<script type="text/javascript">
+ jQuery(function($){
+ $(document).mouseup(function (e){ // событие клика по веб-документу
+  var div = $("#zakaz"); // тут указываем ID элемента
+  if (!div.is(e.target) // если клик был не по нашему блоку
+      && div.has(e.target).length === 0) { // и не по его дочерним элементам
+   div.hide(); // скрываем его
+  }
+ });
+});
+</script>
+
+
+ребята )
+ при установке онкликов , могут быть случаи когда нужно делать экранирование )  не забывайте   
+(  http://lifeexample.ru/php-primeryi-skriptov/ekranirovanie-kavyichek-v-php-javascript-i-sql.html  ) 
+   к примеру  ( так не работает https://prnt.sc/mbybmp ) ---> так работает ( https://prnt.sc/mbybt6 )
+
+
+
+   
+   По поводу онкликов - если вдруг кому надо ставить онклик на тильде то мы не ставим его как обычно, 
+   а делаем по инструкции http://help-ru.tilda.ws/statistics-goal#button 
+   (нужно код который генерирует сама тильда передать постановщику) 
+
+   онклики на кнопку ) 
+   если совсем сложно будет - делайте костылем и берите доп время)
+$('селектор нужной кнопки/инпута').attr('onclick','yaCounter51837029.reachGoal(\'otpravka\'); return true;');
+для примера)
+
+
+
+
+Костылик php, делает редиректик с www на без www (rainbowsmile) 
+
+if (strrpos($_SERVER['SERVER_NAME'], "www.") !== false) {
+  $link = str_replace("www", "", $_SERVER['SERVER_NAME']);
+  header("HTTP/1.1 301 Moved Permanently");
+  header("Location: $link");
+  exit;
+}
+
+это в error.php , в теме joomla :)
+if($this->error->getCode()=='404') {
+ header("HTTP/1.0 404 Not Found");
+ $url=JURI::root()."404";
+ $data = file_get_contents($url) or die("Cannot open URL");
+    echo $data; 
+}
+отдает ответ 404 от сервера для несуществующих страничек))
+
+
+
+Если вас просят скрыть страницу/страницы на сайте, а там какой-нибудь непонятный самопис и функционально скрыть нельзя, только удалить, а потом могут попросить вернуть какие-то страницы, можете использовать этот костылик php, вставив его в index.php в корне, после <? или <?php
+if($_SERVER['REQUEST_URI'] == 'сюда относительную ссылку'){
+    header('Location: /404');
+    exit();
+}
+
+
+https://myfreeproject.com/soft/81-kmsauto-net-2016.html   активировать винду
+
+с одного поля в админке вывести над каталогом -под каталогом блок
+jQuery(document).ready(function( $ ) {
+ let catDescription = $(".cat-desc-text").text();
+ let descriptionParts = catDescription.split('####');
+
+ $(".cat-desc-text").text(descriptionParts[0]);
+ $(descriptionParts[1]).insertAfter($(".catalog"));
+});
+#### - разделитель
+Попробуй
+Вставь в шапку каталога. После подключения jquery
+Только измени описание категории
+
+
+или так   --
+<script>
+    jQuery(document).ready(function( $ ) {
+     let catDescription = $(".cat-desc-text").html();
+     let descriptionParts = catDescription.split('####');
+
+     $(".cat-desc-text").html(descriptionParts[0]);
+
+     let block = "<div class=\"cat-desc-text\">" + descriptionParts[1] + "</div>";
+     $(block).insertAfter($(".catalog"));
+
+     $(".cat-desc-text").show();
+    });
+</script>
+
+
+Запросик SQL, заменяет парольчик к админке UMI CMS (rainbowsmile)
+
+UPDATE cms3_object_content SET varchar_val=md5('8BK#ZAo8YP5x') WHERE obj_id=(SELECT id FROM cms3_objects WHERE 
+guid='system-supervisor' LIMIT 1) AND field_id=(SELECT id FROM cms3_object_fields WHERE name='password' LIMIT 1)
+
+
+
+Костылик jQuery, определяет главную страничку и удаляет то, что нужно) (rainbowsmile)
+
+jQuery(document).ready(function(){
+	if(location.href =='https://hortaltd.ru/'){
+	jQuery('.add_to_cart_form > .value').remove()
+}});
+
+
+вот ифрейм автозагрузки видео
+<iframe src="https://www.youtube.com/embed/qzn_hKhk2yo?controls=0&showinfo=0&rel=0&autoplay=1&mute=1&VQ=HD720&loop=1&playlist=qzn_hKhk2yo&start=0" frameborder="0" allowfullscreen></iframe>
+
+потом его стилизовать нужно (растянуть чтобы значков ютуб не видно было)
+
+
+
+
+Костылик php, убирает index.php в конце url (можно указать свое значение) и делает 301 редиректик на страничку без index.php (rainbowsmile)
+
+$url = explode('/', $_SERVER['REQUEST_URI']);
+$lastEl = $url[count($url) - 1];
+if ($lastEl == "index.php") {
+  $lastEl = str_replace("index.php", "", $_SERVER{"REQUEST_URI"});
+ header("HTTP/1.1 301 Moved Permanently");
+ header("Location: $lastEl");
+  exit();
+}
+
+
+
+Правило для htaccess, делает 301 редиректик страничек со слэшом на странички без слеша и сразу на https и не трогает админку)) :)
+RewriteCond %{REQUEST_URI} !\?
+RewriteCond %{REQUEST_URI} !\&
+RewriteCond %{REQUEST_URI} !\=
+RewriteCond %{REQUEST_URI} !\.
+RewriteCond %{REQUEST_URI} ![^\/]$
+RewriteCond %{REQUEST_URI} !^/administrator
+RewriteRule ^(.*)\/$ https://line-arts.ru/$1 [R=permanent,L]
+
+
+
+Вывести доп поле в битриксе, путь к файлику :)
+/home/bitrix/www/local/templates/xdevice/components/bitrix/catalog.section/sections/templete.php
+если нужно выводить html-кодик, поставить перед выводом тильду
+
+
+Правило для htaccess, делает 301 редиректик, убирает index.php внутри ссылочки URL :)
+
+RewriteRule ^index.php/(.*)$ https://xn----ctbbjctkqqbtgle.xn--p1ai/$1 [R=permanent,L]
+
+
+Бэкап на битриксе делайте лучше таким образом -
+1. в админке идем в настройки http://prntscr.com/ltfd9u
+2. находим Резервное копирование http://prntscr.com/ltfdkq , нажимаем на Создание резервной копии
+3. Размещение резервной копии - выбираем "в папке сайта" и нажимаем "Создать резервную копию" http://prntscr.com/ltfecp
+4. резервая копия сохраняется на FTP в папке bitrix/backup/ (также доступна и в админке http://prntscr.com/ltfgdl )
+у битрикса, обычно, очень много таблиц в БД, а админер больше 450 таблиц не тянет, а phpMyAdmin не всегда доступен
+данный способ гарантирует 100% откат без ошибок в случае чего, т.к. в резервную копию входит и БД и полное FTP (rainbowsmile)
+
+
+Костылик php, делает 301 редиректик)
+if ($_SERVER['REQUEST_URI'] == "/services/rubbish/") {
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: /services/disinfection/rubbish/");
+  exit();
+}
+
+если откатывать бд - смотреть на возможный вес загрузки обратно
+только это
+сколько таблиц у вас
+админер просто больше 450 не тянет
+
+phpMyAdmin
+
+https://wp-kama.ru/function/show_admin_bar
+добавить админ консоль ВП вверху
+
+Проверка отправки целей (onclick) Яндекса
+https://yandex.ru/support/metrika/general/check-goal.html
+
+
+Костылик php, убирает index.php из url страничек во всех вложенностях и делает редиректик странички на без index.php (rainbowsmile) 
+
+<?php
+if (strrpos($_SERVER['REQUEST_URI'], "index.php") !== false) {
+ $link = str_replace("index.php", "", $_SERVER{"REQUEST_URI"});
+ header("HTTP/1.1 301 Moved Permanently");
+  header("Location: $link");
+  exit;
+}
+?>
+
+
+Редиректик страничек с помощью php для подключения файлов)
+подключение файликов, вставлять в index.php или header (если битрикс, например) 
+<?
+define("DOC_ROOT", $_SERVER['DOCUMENT_ROOT']);
+if (file_exists(DOC_ROOT . "/redirect/redirect.php")) {
+  require_once DOC_ROOT . "/redirect/redirect.php";
+  $redirector = new Redirect(DOC_ROOT . "/redirect_links.csv", ";");
+  $redirector->action();  
+}
+?>
+
+Костылик для добавления onclick для кнопочек карточек товаров на opencart, если на кнопочке уже стоит onclick с вызовом функции :)
+заменить в файликах cartpopup.js и common.js http://prntscr.com/luhfyt
+function cell (){
+ yaCounter49051280.reachGoal('buy'); 
+ return true;
+}
+
+function addToCart(product_id,quantity) {
+
+ if(product_id.search('zzz') != -1){
+  cell();
+ }
+
+ product_id = product_id.replace("zzz","");
+
+
+Костылик jquery, делает автозаполение в нашей форме) :)
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+jQuery('input[name="mf_product_name"]').val(jQuery("body > div.container.x64 > div.MainContext > div.col-md-7 > h1").text());
+  });
+</script>
+ 
+ 
+ 
+ Костылик php, делает редиректик с /index.php на без /index.php, c «/» на .html , c без «/» на .html :)
+
+if (strrpos($_SERVER['REQUEST_URI'], "index.php") !== false || (substr_count($_SERVER['REQUEST_URI'], '/') > 1 && substr($_SERVER['REQUEST_URI'], -1) == '/' || substr($_SERVER['REQUEST_URI'], -1) !== '/' )){
+
+ if (strrpos($_SERVER['REQUEST_URI'], "index.php/") !== false && substr($_SERVER['REQUEST_URI'], -1) == '/' ) {
+        $link = str_replace("index.php/", "", $_SERVER["REQUEST_URI"]);
+  $link2 = substr($link, 0, -1) . '.html';
+     if ($_SERVER['REQUEST_URI'] == '/index.php/') {
+         header("HTTP/1.1 301 Moved Permanently");
+         header("Location: http://remontvam.com");
+         exit();
+     } else {
+         header("HTTP/1.1 301 Moved Permanently");
+         header("Location: http://remontvam.com".$link2);
+     }
+
+
+  exit();
+  }elseif (strrpos($_SERVER['REQUEST_URI'], "index.php/") !== false && strrpos($_SERVER['REQUEST_URI'], ".html" )) {
+            $link = str_replace("index.php/", "", $_SERVER["REQUEST_URI"]) . ".html";
+            header("HTTP/1.1 301 Moved Permanently");
+            header("Location: http://remontvam.com" . $link);
+            exit();
+  }elseif (strrpos($_SERVER['REQUEST_URI'], "index.php") !== false ) {
+     if ($_SERVER['REQUEST_URI'] == '/index.php') {
+         $link = str_replace("index.php/", "", $_SERVER["REQUEST_URI"]);
+
+     }else {
+         $link = str_replace("index.php/", "", $_SERVER["REQUEST_URI"] . ".html");
+
+     }
+            header("HTTP/1.1 301 Moved Permanently");
+            header("Location: http://remontvam.com" . $link);
+            exit();
+  }elseif (substr($_SERVER['REQUEST_URI'], -1) == '/') {
+  $link2 = substr($_SERVER['REQUEST_URI'], 0, -1) . '.html';
+ header("HTTP/1.1 301 Moved Permanently");
+ header("Location: http://remontvam.com{$link2}");
+  exit();
+  }
+
+}
+if (substr($_SERVER['REQUEST_URI'], -1) !== '/' && strrpos($_SERVER['REQUEST_URI'], ".html") == false &&  strrpos($_SERVER['REQUEST_URI'], "index.php/") == false ) {
+    $link2 = $_SERVER['REQUEST_URI'] . '.html';
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: http://remontvam.com" . $link2);
+    exit();
+}
+ 
+ 
+http://prntscr.com/nugfpp  ( как провверить - подключена ли библиотека jq) 
+ 
+ 
+Правило для htaccess, делает 301 редиректи страничек с .html на слэш в конце URL :)
+RedirectMatch /(.*)\.html$ /$1 
+ 
+ 
+
+Костылик js, убирает якорную ссылочку из URL странички :)
+<script type="text/javascript">
+  var url = window.location.toString(); 
+url = url.replace(/#home/,''); 
+window.location = url;
+</script>
+
+микроразметка , инструкция
+https://yandex.ru/support/webmaster/schema-org/what-is-schema-org.html
+
+
+
+
+Можно создать неограниченное количество карт на одной странице.
+
+Вы создали два обработчика события window.onload. Второй обработчик переписал первый, в итоге всегда будет создаваться только вторая карта.
+
+Для того, чтобы этого избежать. Напишите код создания карт в одном обработчике.
+window.onload = function () {
+    // Первая карта
+    var map = new YMaps.Map(document.getElementById("YMapsID"));
+    map.setCenter(new YMap.GeoPoint(35, 55), 7);
+
+    // Вторая карта
+    var map2 = new YMaps.Map(document.getElementById("YMapsID2"));
+    map2.setCenter(new YMap.GeoPoint(35, 55), 7);
+}
+
+
+
+Костылик php, заменяет строки на страничках сайтика :)
+
+ob_start();
+define( 'WP_USE_THEMES', true );
+
+/* Loads the WordPress Environment and Template /
+require( dirname( FILE ) . '/wp-blog-header.php' );
+$content = ob_get_contents();
+ob_end_clean();
+
+echo str_replace("xn--90afccplrjqdbru5a7f.xn--p1ai", "dobryeruki.com", $content)
+
+
+
+Костылик php, делает кликабельными хлебные крошки в Joomla, кроме последнего раздельчика :)
+
+defined('_JEXEC') or die;
+?>
+ 
+<div>
+<div class="breadcrrr" xmlns:v="http://rdf.data-vocabulary.org/#">
+<?php if ($params->get('showHere', 1))
+{
+echo '<span>' .JText::_('MOD_BREADCRUMBS_HERE').'</span>';
+}
+?>
+<?php for ($i = 0; $i < $count; $i ++) :
+ 
+// If not the last item in the breadcrumbs add the separator
+if ($i < $count -1) {
+if (!empty($list[$i]->link)) {
+echo '<span typeof="v:Breadcrumb"><a href="'.$list[$i]->link.'" rel="v:url" property="v:title">'.$list[$i]->name.'</a></span>';
+} else {
+echo '<span>';
+echo $list[$i]->name;
+echo '</span>';
+}
+if($i < $count -2){
+echo ' '.$separator.' ';
+}
+}  elseif ($params->get('showLast', 1)) { // when $i == $count -1 and 'showLast' is true
+if($i > 0){
+echo ' '.$separator.' ';
+}
+echo '<span typeof="v:Breadcrumb">'.$list[$i]->name.'</span>';
+}
+ 
+endfor; ?>
+</div>
+</div>
+
+
+
+
+
+
+
+http://gnatkovsky.com.ua/kak-sdelat-ssylki-na-viber-whatsapp-telegram.html
+настроить соц сети
+
+Двигать блок 
+jQuery(document).ready(function(){
+$('#content > div > div > div:nth-child(1) > div > div > div.post_body > div.term-description > h3').insertAfter($('#content > div > div > div:nth-child(1)'));
+});
+
+Костылик php, делает редиректик с http на https :)
+
+<?
+if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off"){
+    $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header('HTTP/1.1 301 Moved Permanently');
+    header('Location: ' . $redirect);
+    exit();
+}
+?>
+
+
+http://an.rem-mach.ru/tasks/885843 
+пример выполнения оценки возможности 
+http://prntscr.com/lrl76s
+
+
+
+  jQuery(document).ready(function(){
+            if(location.pathname.indexOf('/pages/contact/')!=-1){
+jQuery('#post-742 > article > div > div.vc_row.wpb_row.vc_row-fluid.vc_custom_1413471192262 > div > div:nth-child(2) > div > div > div > div > h3:nth-child(1),#post-742 > article > div > div.vc_row.wpb_row.vc_row-fluid.vc_custom_1413471192262 > div > div:nth-child(2) > div > div > div > div > h5').wrap('<span class="ya-phone"></span>')
+}
+});
+
+
+
+
+Буфер выыода пхп
+
+ob_start();
+define( 'WP_USE_THEMES', true );
+
+/* Loads the WordPress Environment and Template /
+require( dirname( FILE ) . '/wp-blog-header.php' );
+$content = ob_get_contents();
+ob_end_clean();
+echo str_replace("xn--90afccplrjqdbru5a7f.xn--p1ai", "dobryeruki.com", $content);
+
+
+Подключение меты нестандартное, подключаеться вместо meta.php
+
+<?
+$_Site_Mimes = ob_get_contents();
+ob_end_clean();
+$handle = fopen($_SERVER['DOCUMENT_ROOT'].'/aweb_seo/seo.csv', 'r');
+while (($data = fgetcsv($handle, 1000, ';')) !== FALSE)
+{
+    $num = count($data);
+    for ($c=0; $c < $num; $c++)
+    {
+        if (!empty(urldecode($_SERVER['REQUEST_URI'])) && !empty(urldecode($data[0])) && urldecode($_SERVER['REQUEST_URI']) == urldecode($data[0]))
+        {
+            if (!empty($data[1]) && $data[1] != '-')
+            {
+                $_Site_Mimes = preg_replace('|<title>(.*?)</title>|si', '<title>'.$data[1].'</title>', $_Site_Mimes);
+            }
+            if (!empty($data[2]) && $data[2] != '-')
+            {
+                $_Site_Mimes = preg_replace('|<meta name="description" content="(.*?)" />|si', '<meta name="description" content="'.$data[2].'" />', $_Site_Mimes);
+            }
+            if (!empty($data[3]) && $data[3] != '-')
+            {
+                $_Site_Mimes = preg_replace('|<meta name="keywords" content="(.*?)" />|si', '<meta name="keywords" content="'.$data[3].'" />', $_Site_Mimes);
+            }
+        }
+    }
+}
+fclose($handle);
+echo $_Site_Mimes;
+?>
+
+
+Скрипт JQuery для того, что бы добавить атрибут к переменной(id). В данном случае добавляем 
+атрибут checked к айдишнику "#payment_id_3" - radio
+
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+if(location.pathname.indexOf("cart") !=-1)
+{
+$("#payment_id_3").attr("checked","checked");
+}
+  });
+</script>
+
+
+
+Вывод редиректов через php.
+
+$new_URL = array(
+                'old-page.php' => 'new-page.php',
+                'old-page2.php' => 'new-page2.php',
+                'old-page3.php' => 'new-page3.php',
+                'old-page4.php' => 'new-page4.php',
+                'old-page5.php' => 'new-page5.php',
+                'old-page6.php' => 'new-page6.php',
+                'old-page7.php' => 'new-page7.php',
+                'old-page8.php' => 'new-page8.php',
+                'old-page9.php' => 'new-page9.php',
+
+        );
+
+if (isset($_GET['req']))
+{
+    if(array_key_exists($_GET['req'], $new_URL))
+    {
+        $loc = 'http://www.example.co.uk/'.$new_URL[$_GET['req']];
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: '.$loc.'');
+    }else{
+        echo 'requested URL not found!',
+    }
+}
+
+Костылик js , делает автозаполнение по h1, разбивая текст по разделителю, в данном случае по двоеточию
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    var izi = $("#main > div:nth-child(6) > h1").text(); //запердоливаем текст
+    var str = izi.split(":",1); // берем первый элемент по разделителю
+$("#main > div.maoncontainer > table > tbody > tr > td:nth-child(2) > div.serviceOrderForm > div > div > form > div.inpt_wrpr > div:nth-child(1) > input[type=text]").val(str[0]); //присваиваем инпуту первый элемент, здесь берем селектор с заголовка(copy selector, правой кнопкой мыши по заголовку)
+  })
+</script>
+
+
+Генерация меты по страницам:
+<?php
+
+$categs = array(
+ '/440-460.html'
+,'/480.html'
+,'/700-84.html'
+,'/700-85.html'
+,'/700-usa-85.html'
+,'/740-88.html'
+,'/740-usa-88.html'
+,'/740-usa-91.html'
+,'/760-88.html'
+,'/760-usa-88.html'
+,'/780.html'
+,'/780-usa.html'
+,'/850.html'
+,'/850-usa.html'
+,'/900-91-93.html'
+,'/900-94-s90-v90.html'
+,'/900-94-s90-v90-usa.html'
+,'/900-usa-91-93.html'
+,'/s70-v70-c70.html'
+,'/s40-04.html'
+,'/s40-04-v50.html'
+,'/s40-v40.html'
+,'/v70-v70xc-xc70-s60.html'
+,'/s80.html'
+,'/s80-07.html'
+,'/xc90.html'
+);
+
+if(in_array($_SERVER['REQUEST_URI'], $categs)){
+  $document->setTitle('Автозапчасти для Volvo '. strip_tags($category->category_name) .' в Москве');
+  $category->h1_page = 'Автозапчасти для Volvo '. strip_tags($category->category_name);
+}
+
+?>
+
+Мета DRUPAL
+if (empty($_SERVER['HTTPS'])){$serverProtocol = 'http';}else{$serverProtocol = 'https';}
+$serverHost = $_SERVER["HTTP_HOST"];
+//$serverHost = str_replace("www.", "", $serverHost);
+$serverDomainFull = $serverProtocol.'://'.$serverHost;
+
+include_once 'parse.php';
+
+ foreach($massObj as $ms){
+
+   //$msURL = str_replace("www.", "", $ms["url"]);
+  $toUrl = str_replace($serverDomainFull, "", $ms[4]);
+  //$toUrl = urldecode(iconv("CP1251", "UTF-8", $toUrl)); // расскоментировать при наличии кирилицы в урле
+
+  
+  if(isset($currentLocal) && $currentLocal == 'ru_RU.utf-8'){
+    $toTitle = $ms[5];
+    $toDescr = $ms[6];
+    $toKey = $ms[7];
+  }else{
+    $toTitle = iconv("CP1251", "UTF-8", $ms[5]);
+    $toDescr = iconv("CP1251", "UTF-8", $ms[6]);
+    $toKey = iconv("CP1251", "UTF-8", $ms[7]);
+  }
+
+
+Настройка canonical для товаров на opencart^
+    $this->document->addLink($this->url->link('product/product', 'product_id=' . $this->request->get['product_id']), 'canonical');
+      $this->document->addLink($this->url->link('product/category', 'path=' . $category_infog['category_id']), 'canonical');
+
+
+
+
+      //////////////////////////////////ДОБАВЛЕНИЕ ИНФОРМАЦИИ В БАЗУ ДАННЫХ ЧЕРЕЗ ФОРМУ В АДМИНКЕ////////////////////////////////////
+
+<html>
+<head>
+ <title>Запись в БД через форму на php</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <link rel="stylesheet" type="text/css" href="/tabs.css">
+ <script src="ckeditor/ckeditor.js"></script>
+</head>
+<body>
+<form method="POST" action="">
+  
+  <input name="id" style ="width: 400px;" value="<?php echo @$_POST['id']; ?>" type="text" placeholder="id товара, в который записываем описание"/> 
+  <input type="submit" name="export" value="Открыть"/><br><br>
+  <textarea style ="width: 900px; height: 300px; " name="tabtext" id="editor" >
+<?php
+
+if (isset($_POST['export']) && isset($_POST['tabtext']) && isset($_POST['id']) ){
+
+    // Переменные с формы
+    $tabtext = $_POST['tabtext'];
+    $id = $_POST['id'];
+   
+    
+   // Парамы для подключения
+    $db_host = "localhost"; 
+    $db_user = "milden"; // Логин БД
+    $db_password = "Test123!!asd"; // Пароль БД
+    $db_base = 'milden'; // Имя БД
+    $db_table = "Message4"; // Имя Таблицы БД
+    
+    // Подключение к базе данных
+    $mysqli = new mysqli($db_host,$db_user,$db_password,$db_base);
+
+    // Если есть ошибка соединения, выводим её и убиваем подключение
+    if ($mysqli->connect_error) {
+        die('Ошибка : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
+    }
+
+    $result = $mysqli->query("SELECT `tabtext` FROM `Message4` WHERE `Message_ID` = '".$id."' ");
+
+      while ($result = mysqli_fetch_array($result)) {
+        echo "{$result['tabtext']}";
+      }
+
+}
+
+   ?> 
+   </textarea><br>
+   <script>
+    CKEDITOR.replace( 'editor1' );
+</script>
+
+  <input type="submit" name="submit" value="Отправить"/> <br>
+
+ </form>
+
+<?php if (isset($_POST['submit']) && isset($_POST['tabtext']) && isset($_POST['id']) ){
+
+    // Переменные с формы
+    $tabtext = $_POST['tabtext'];
+    $id = $_POST['id'];
+   
+    
+   // Парамы для подключения
+    $db_host = "localhost"; 
+    $db_user = "milden"; // Логин БД
+    $db_password = "Test123!!asd"; // Пароль БД
+    $db_base = 'milden'; // Имя БД
+    $db_table = "Message4"; // Имя Таблицы БД
+    
+    // Подключение к базе данных
+    $mysqli = new mysqli($db_host,$db_user,$db_password,$db_base);
+
+    // Если есть ошибка соединения, выводим её и убиваем подключение
+    if ($mysqli->connect_error) {
+        die('Ошибка : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
+    }
+
+    $result = $mysqli->query("UPDATE `Message4` SET `tabtext` = '".$tabtext."' WHERE `Message_ID` = '".$id."' LIMIT 1");
+    
+    if ($result == true){
+        echo "Информация занесена в базу данных";
+    }else{
+        echo "Информация не занесена в базу данных";
+    }
+}
+
+?> 
+
+
+ <br><a href="http://milden.pro/netcat/admin/"><input type="button" value="Назад"/></a> <br> 
+</body>
+
+</html>
+
+
+
+//////////////////////////////////////////////ВЫВОД ИНФОРМАЦИИ ИЗ БД ПО ФОРМЕ ВЫШЕ////////////////////////////////////////////////////////////////////////////////
+<?php  
+
+   // Парамы для подключения
+    $db_host = "localhost"; 
+    $db_user = "milden"; // Логин БД
+    $db_password = "Test123!!asd"; // Пароль БД
+    $db_base = 'milden'; // Имя БД
+    $db_table = "Message4"; // Имя Таблицы БД
+    // Подключение к базе данных
+    $mysqli = new mysqli($db_host,$db_user,$db_password,$db_base);
+
+if (!$mysqli) {
+    echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
+    exit;
+  }
+
+    $sql = mysqli_query($mysqli, "SELECT `tabtext` FROM `Message4` WHERE `Message_ID` = '".$message."' " );
+
+    while ($result = mysqli_fetch_array($sql)) {
+        echo "{$result['tabtext']}";
+      }
+
+  if (!$sql) {
+    echo 'False';
+  }
+
+?>
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
